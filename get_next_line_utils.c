@@ -6,7 +6,7 @@
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:37:08 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/24 16:25:08 by crtorres         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:33:11 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 size_t	ft_strlen(char *str)
 {
-	size_t	a;
+	size_t	i;
 
-	a = 0;
+	i = 0;
 	if (!str)
 		return (0);
-	while (str[a] != '\0')
+	while (str[i] != '\0')
 	{
-		a++;
+		i++;
 	}
-	return (a);
+	return (i);
 }
 
 /**
@@ -39,7 +39,7 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
-	char	*new_string;
+	char	*str;
 
 	if (!s1)
 	{
@@ -48,29 +48,24 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	if (!s1 || !s2)
 		return (NULL);
-	new_string = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (new_string == NULL)
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (str == NULL)
 		return (NULL);
 	i = -1;
 	j = 0;
 	if (s1)
 		while (s1[++i] != '\0')
-		{
-			new_string[i] = s1[i];
-		}
+			str[i] = s1[i];
 	while (s2[j] != '\0')
-	{
-		new_string[i + j] = s2[j];
-		j++;
-	}
-	new_string[i + j] = '\0';
+		str[i++] = s2[j++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
 	free(s1);
-	return (new_string);
+	return (str);
 }
 
 /**
  * The function ft_strchr() locates the first occurrence of c (converted to 
- * a char) in the string pointed to by s
+ * a char) in the string pointed to by str
  * 
  * @param str This is the string to be searched.
  * @param c The character to search for.
@@ -81,17 +76,17 @@ char	*ft_strjoin(char *s1, char *s2)
 char	*ft_strchr(char *str, int c)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!str)
-		return (NULL);
+		return (0);
 	if (c == '\0')
 		return ((char *)&str[ft_strlen(str)]);
 	while (str[i] != '\0')
 	{
-			if (str[1] == (char) c)
-				return ((char *)&str[i]);
-			i++;
+		if (str[i] == (char) c)
+			return ((char *)&str[i]);
+		i++;
 	}	
 	return (0);
 }

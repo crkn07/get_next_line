@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.cj                                    :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10free (stash);
-return (str);/03 18:36:37 by crtorres          #+#    #+#             */
-/*   Updated
-: 2022/10/24 14:43:55 by crtorres         ###   ########.fr       */
+/*   Created: 2022/10/25 11:14:42 by crtorres          #+#    #+#             */
+/*   Updated: 2022/10/26 18:33:08 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 /**
- * It takes a string and returns a string that contains everything up to the first
- * newline character
+ * It takes a string and returns a string that contains everything up to the 
+ * first newline character
  * 
- * @param stash This is the string that contains the characters that have been read
- * from the file descriptor.
+ * @param stash This is the string that contains the characters that 
+ * have been read from the file descriptor.
  * 
  * @return a string that is the first line of the file.
  */
 char	*ft_get_line(char *stash)
 {
-	int		i;
-	char	*str;
-	
+	int			i;
+	static char	*str;
+
 	i = 0;
 	if (!stash[i])
 		return (NULL);
@@ -52,34 +50,36 @@ char	*ft_get_line(char *stash)
 }
 
 /**
- * It takes a string and returns a copy of that string with the first character
- * removed
+ * It takes a string, finds the first newline character, and returns a new 
+ * string containing everything after the newline
  * 
- * @param stash the string to be stashed
+ * @param stash the string that contains the leftover characters from the 
+ * previous read
  * 
  * @return A pointer to a string.
  */
 char	*ft_stash(char *stash)
 {
 	int		i;
-	int		j;
+	int		c;
 	char	*str;
+
 	i = 0;
-	while (stash[i] && stash[i] != 0)
+	while (stash[i] && stash[i] != '\n')
 		i++;
-	if (!stash)
+	if (!stash[i])
 	{
-		free (stash);
+		free(stash);
 		return (NULL);
 	}
 	str = (char *)malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
 	if (!str)
 		return (NULL);
 	i++;
-	j = 0;
+	c = 0;
 	while (stash[i])
-		str[j++] = stash[i++];
-	str[j] = '\0';
+		str[c++] = stash[i++];
+	str[c] = '\0';
 	free (stash);
 	return (str);
 }
@@ -88,8 +88,8 @@ char	*ft_stash(char *stash)
  * It reads from a file descriptor and stores the readed data in a string
  * 
  * @param fd file descriptor
- * @param stash the string that contains the leftover characters from the previous
- * read.
+ * @param stash the string that contains the leftover characters from the 
+ * previous read.
  * 
  * @return A pointer to a string.
  */
@@ -105,7 +105,7 @@ char	*ft_read_and_stash(int fd, char *stash)
 	while (!ft_strchr(stash, '\n') && readed != 0)
 	{
 		readed = read(fd, buf, BUFFER_SIZE);
-		if (readed == -1)
+		if (readed < 0)
 		{
 			free(buf);
 			return (NULL);
@@ -117,13 +117,27 @@ char	*ft_read_and_stash(int fd, char *stash)
 	return (stash);
 }
 
+/**
+ * Read from the file descriptor and store the read data in a static variable. If
+ * the static variable contains a newline, return the data up to the newline. If
+ * the static variable does not contain a newline, read from the file descriptor
+ * again
+ * 
+ * @param fd the file descriptor
+ * 
+ * @return A line of text from the file descriptor.
+ */
 char	*get_next_line(int fd)
 {
 	char		*line;
 	static char	*stash;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
+	}
 	stash = ft_read_and_stash(fd, stash);
 	if (!stash)
 		return (NULL);

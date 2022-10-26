@@ -6,7 +6,7 @@
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:37:34 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/24 15:31:46 by crtorres         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:33:10 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 5
 # endif
 
 # include "unistd.h"
-# include "stdlib.h"
 # include "stdlib.h"
 
 char	*get_next_line(int fd);
