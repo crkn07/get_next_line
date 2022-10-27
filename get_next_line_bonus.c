@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/25 11:14:42 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/27 19:11:02 by crtorres         ###   ########.fr       */
+/*   Created: 2022/10/27 17:18:51 by crtorres          #+#    #+#             */
+/*   Updated: 2022/10/27 19:10:51 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 /**
- * It takes a string and returns a pointer to a new string that contains the 
- * first line of the original string up to the newline character.
+ * It returns a string containing the first line of the string passed to it, or
+ * NULL if there is no line
  * 
- * @param stash This is the string that contains the characters that have been 
- * read from the file descriptor.
+ * @param stash the string that contains the line we want to get
  * 
- * @return A pointer to a string.
+ * @return A string of characters that is the line of the file.
  */
 char	*ft_get_line(char *stash)
 {
-	int			i;
-	static char	*str;
+	int		i;
+	char	*str;
 
 	i = 0;
 	if (!stash[i])
@@ -85,13 +84,13 @@ char	*ft_stash(char *stash)
 }
 
 /**
- * It reads from the file descriptor and stores the readed data in the stash
+ * It reads from a file descriptor and stores the readed data in a string
  * 
  * @param fd file descriptor
  * @param stash the string that contains the leftover characters from the 
  * previous read.
  * 
- * @return a pointer to the first occurrence of the character c in the string s.
+ * @return A pointer to a string.
  */
 char	*ft_read_and_stash(int fd, char *stash)
 {
@@ -118,32 +117,28 @@ char	*ft_read_and_stash(int fd, char *stash)
 }
 
 /**
- * Read from the file descriptor and store the read data in a static variable. 
- * If the static variable contains a newline character, return the data up to 
- * the newline character. If the static variable does not contain a newline 
- * character, read from the file descriptor again and append the read data to 
- * the static variable. If the file descriptor is empty, return the data in the 
- * static variable
+ * Read from the file descriptor fd until a newline is found, and return the line
+ * read
  * 
- * @param fd the file descriptor from which to read
+ * @param fd file descriptor
  * 
  * @return A line of text from the file descriptor.
  */
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	stash = ft_read_and_stash(fd, stash);
-	if (!stash)
+	stash[fd] = ft_read_and_stash(fd, stash[fd]);
+	if (!stash[fd])
 		return (NULL);
-	line = ft_get_line(stash);
-	stash = ft_stash(stash);
+	line = ft_get_line(stash[fd]);
+	stash[fd] = ft_stash(stash[fd]);
 	return (line);
 }
