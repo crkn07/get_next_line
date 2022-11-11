@@ -6,7 +6,7 @@
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 17:18:51 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/27 19:10:51 by crtorres         ###   ########.fr       */
+/*   Updated: 2022/11/11 13:00:12 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,51 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*stash[OPEN_MAX];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0)
+		return (NULL);
+	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
 		free(stash[fd]);
 		stash[fd] = NULL;
 		return (NULL);
 	}
-	stash[fd] = ft_read_and_stash(fd, stash[fd]);
-	if (!stash[fd])
-		return (NULL);
-	line = ft_get_line(stash[fd]);
-	stash[fd] = ft_stash(stash[fd]);
-	return (line);
+	if (fd >= 0)
+	{
+		stash[fd] = ft_read_and_stash(fd, stash[fd]);
+		if (!stash[fd])
+			return (NULL);
+		line = ft_get_line(stash[fd]);
+		stash[fd] = ft_stash(stash[fd]);
+		return (line);
+	}
+	return (0);
 }
+/*int	main(void)
+{
+	char	*line;
+	int		fd;
+	get_next_line(-4);
+	fd = 0;
+	if (fd == -1)
+		return (-1);
+	fd = open("fil", O_RDONLY);
+	line = "";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		printf("%s", line);
+	}
+	fd = close(fd);
+	return (0);
+}*/
+/*int	main(void)
+{
+	char	*line;
+
+int fd = open("fil", O_RDONLY);
+	printf("%s\n",get_next_line(fd));
+	printf("%s\n",get_next_line(fd));
+	close(fd);
+	printf("%s\n",get_next_line(fd));
+	return (0);
+}*/

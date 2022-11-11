@@ -6,7 +6,7 @@
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 17:18:45 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/27 19:10:54 by crtorres         ###   ########.fr       */
+/*   Updated: 2022/11/11 13:11:39 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 # define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 5
+#  define BUFFER_SIZE BUFSIZ
+# endif
+
+# if BUFFER_SIZE > 9223372036854775806L /*Double long*/
 # endif
 
 # include "unistd.h"
 # include "stdlib.h"
 # include "limits.h"
+# include "fcntl.h"
+# include "stdio.h"
 
 char	*get_next_line(int fd);
 char	*ft_read_and_stash(int fd, char *stash);

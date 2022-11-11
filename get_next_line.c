@@ -6,7 +6,7 @@
 /*   By: crtorres <crtorres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 11:14:42 by crtorres          #+#    #+#             */
-/*   Updated: 2022/10/27 19:11:02 by crtorres         ###   ########.fr       */
+/*   Updated: 2022/11/11 13:05:00 by crtorres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,3 +147,22 @@ char	*get_next_line(int fd)
 	stash = ft_stash(stash);
 	return (line);
 }
+
+/*int	main(void)
+{
+	char	*line;
+	int		fd;
+	get_next_line(-4);
+	fd = 0;
+	if (fd == -1)
+		return (-1);
+	fd = open("fil", O_RDONLY);
+	line = "";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		printf("%s", line);
+	}
+	fd = close(fd);
+	return (0);
+}*/
